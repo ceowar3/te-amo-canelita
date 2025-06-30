@@ -2,10 +2,49 @@
 
 <html lang="es">
 <head>
+<style>
+.btn-control {
+  width: 60px;
+  height: 60px;
+  border: 2px solid white;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 1.5rem;
+  background: rgba(255,255,255,0.3);
+  color: white;
+  user-select: none;
+}
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  #ventanaGusano {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+</style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title> Para mi canelita 🖤</title>
 <style>
+.btn-control {
+  width: 60px;
+  height: 60px;
+  border: 2px solid white;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 1.5rem;
+  background: rgba(255,255,255,0.3);
+  color: white;
+  user-select: none;
+}
+
   * { box-sizing: border-box; }
   body {
     margin: 0; padding: 0;
@@ -201,7 +240,70 @@
     }
   }
 </style>
-</head>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  font-family: monospace;
+}
+#ventanaGusano {
+  position: fixed !important;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+#juego-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+canvas#gameCanvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: #000;
+}
+#controles {
+  position: relative;
+  bottom: 0;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.fila-controles {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-control {
+  width: 60px;
+  height: 60px;
+  border: 2px solid white;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 1.5rem;
+  background: rgba(255,255,255,0.3);
+  color: white;
+  user-select: none;
+}
+</style></head>
 <body>
 <h1 aria-label="Terminal de amor" class="typewriter">
     ceo@juliana:~$ echo "Te amo, mi canelita"
@@ -730,8 +832,9 @@ setInterval(actualizarContador, 1000);
 function abrirVentanaGusano() {
   const ventana = document.getElementById('ventanaGusano');
   if (ventana) ventana.style.display = 'flex';
-canvas.width = 360;
-canvas.height = 600;
+canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+canvas.height = window.innerHeight;
 canvas.style.display = 'block';
 puntajeDiv.style.display = 'block';
 puntos = 0;
@@ -743,11 +846,17 @@ clearInterval(window._gusanoLoop);
 window._gusanoLoop = setInterval(juego, 150);
 }
 
+
+function cerrarVentanaGusano() {
+  const ventana = document.getElementById('ventanaGusano');
+  if (ventana) ventana.style.display = 'none';
+  clearInterval(window._gusanoLoop);
+}
 </script>
 <!-- Gusano que atrapa corazones -->
-<div class="ventana" id="ventanaGusano" style="display:none;">
+<div class="ventana" id="ventanaGusano" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000;"><button id="cerrarGusano" onclick="cerrarVentanaGusano()" style="position:absolute;top:10px;right:10px;padding:0.5rem 1rem;font-size:1.5rem;color:#fff;background:transparent;border:none;cursor:pointer;z-index:1001;">✖</button>
 <span class="cerrar" onclick="cerrarVentana('ventanaGusano')">×</span>
-<div id="juego-wrapper" style="position: relative; width: 90vw; height: 80vh; max-width: 360px; margin: auto; background: #000; border-radius: 20px; overflow: hidden;"><canvas height="600" id="gameCanvas" style="width: 100%; height: 100%; display: block;" width="360"></canvas><div id="puntaje" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:8px;font-size:1.4rem;color:white;z-index:10;font-family:monospace;">Puntos: 0</div>
+<div id="juego-wrapper" style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; overflow: hidden;"><canvas height="600" id="gameCanvas" style="position:absolute; top:0; left:0; width:100vw; height:100vh; display:block;" width="360"></canvas><div id="puntaje" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:8px;font-size:1.4rem;color:white;z-index:10;font-family:monospace;">Puntos: 0</div>
 <div id="controles" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;gap:10px;">
 <div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
 <div class="btn-control" onclick="cambiarDireccion('arriba')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬆️</div>
@@ -768,16 +877,17 @@ const puntajeDiv = document.getElementById('puntaje');
 const gusano = {
   cuerpo: [{ x: 100, y: 100 }],
   direccion: 'derecha',
-  tamaño: 20,
-  velocidad: 20
+  tamaño: 12,
+  velocidad: 12
 };
 let corazon;
 
 function abrirVentanaGusano() {
   const ventana = document.getElementById('ventanaGusano');
   if (ventana) ventana.style.display = 'flex';
-  canvas.width = 360;
-  canvas.height = 600;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.height = window.innerHeight;
   canvas.style.display = 'block';
   puntajeDiv.style.display = 'block';
   puntos = 0;
@@ -866,6 +976,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' && dir !== 'derecha') gusano.direccion = 'izquierda';
   if (e.key === 'ArrowRight' && dir !== 'izquierda') gusano.direccion = 'derecha';
 });
+
+function cerrarVentanaGusano() {
+  const ventana = document.getElementById('ventanaGusano');
+  if (ventana) ventana.style.display = 'none';
+  clearInterval(window._gusanoLoop);
+}
 </script>
 </body>
 </html>
