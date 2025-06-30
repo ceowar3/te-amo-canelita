@@ -521,14 +521,23 @@
 
   // Contador de días juntos (365 fijo)
   const contador = document.getElementById("contador");
-  const fechaInicio = new Date(2023, 5, 30); // Ajusta a tu fecha, junio es 5 porque enero=0
-  function actualizarContador() {
-    const hoy = new Date();
-    const diff = hoy.getTime() - fechaInicio.getTime();
-    // Aquí fijo en 365 días como pediste:
-    const dias = 365;
-    contador.textContent = `Llevamos juntos: ${dias} días ❤️`;
-  }
+  const fechaInicio = new Date("2024-06-16T00:00:00-04:00"); // 16 de junio de 2024, hora NY
+  
+function actualizarContador() {
+  const ahora = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  const fechaAhora = new Date(ahora);
+  const diff = fechaAhora - fechaInicio;
+
+  const totalSegundos = Math.floor(diff / 1000);
+  const dias = Math.floor(totalSegundos / (60 * 60 * 24));
+  const horas = Math.floor((totalSegundos % (60 * 60 * 24)) / (60 * 60));
+  const minutos = Math.floor((totalSegundos % (60 * 60)) / 60);
+  const segundos = totalSegundos % 60;
+
+  contador.textContent = `Llevamos juntos: ${dias} días, ${horas}h ${minutos}m ${segundos}s ❤️`;
+}
+setInterval(actualizarContador, 1000);
+
   actualizarContador();
 
   // Modo mágico: 200 mensajes mágicos con voz
@@ -697,7 +706,7 @@
   let indiceMagico = 0;
   function activarMagia() {
     mostrarMensajeMagico();
-    magiaInterval = setInterval(mostrarMensajeMagico, 8000);
+    magiaInterval = setInterval(mostrarMensajeMagico, 3000);
   }
   function detenerMagia() {
     clearInterval(magiaInterval);
@@ -729,4 +738,3 @@
 
 </body>
 </html>
-
