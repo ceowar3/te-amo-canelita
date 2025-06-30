@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title> Para mi canelita 🖤</title>
 <style>
   * { box-sizing: border-box; }
@@ -202,34 +203,29 @@
 </style>
 </head>
 <body>
-
-  <h1 class="typewriter" aria-label="Terminal de amor">
+<h1 aria-label="Terminal de amor" class="typewriter">
     ceo@juliana:~$ echo "Te amo, mi canelita"
   </h1>
-
-  <div id="contenedor">
-    <div id="botones" role="navigation" aria-label="Menú de mensajes">
-      <button aria-controls="mensaje1" aria-expanded="false" onclick="toggleVentana('mensaje1', this)">Mensaje secreto 💌</button>
-      <button aria-controls="mensaje2" aria-expanded="false" onclick="toggleVentana('mensaje2', this)">Poema dedicado 📝</button>
-      <button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
-      <button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
-      <button onclick="enviarBeso()">Enviar beso 💋</button>
-    <button onclick="iniciarJuegoGusano()">Gusano de Amor 💘</button>
-    
+<div id="contenedor">
+<div aria-label="Menú de mensajes" id="botones" role="navigation">
+<button aria-controls="mensaje1" aria-expanded="false" onclick="toggleVentana('mensaje1', this)">Mensaje secreto 💌</button>
+<button aria-controls="mensaje2" aria-expanded="false" onclick="toggleVentana('mensaje2', this)">Poema dedicado 📝</button>
+<button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
+<button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
+<button onclick="enviarBeso()">Enviar beso 💋</button>
+<button onclick="abrirVentanaGusano()">Gusano de Amor 💘</button>
 </div>
-
-    <div id="ventanas" role="region" aria-live="polite" aria-label="Ventanas de mensajes">
-      <section id="mensaje1" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje1Title" tabindex="-1">
-        <button class="cerrar" aria-label="Cerrar mensaje secreto" onclick="cerrarVentana('mensaje1')">&times;</button>
-        <h2 id="mensaje1Title">Mensaje secreto 💌</h2>
-        <p>No importa cuántos loops de la vida pasen, siempre haré return contigo. 🥺</p>
-        <p>Incluso si el universo hace un rollback, yo volvería a encontrarte, mi canelita. ❤️‍🔥</p>
-      </section>
-
-      <section id="mensaje2" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje2Title" tabindex="-1">
-        <button class="cerrar" aria-label="Cerrar poema" onclick="cerrarVentana('mensaje2')">&times;</button>
-        <h2 id="mensaje2Title">Poema dedicado 📝</h2>
-        <p>
+<div aria-label="Ventanas de mensajes" aria-live="polite" id="ventanas" role="region">
+<section aria-labelledby="mensaje1Title" aria-modal="false" class="ventana" id="mensaje1" role="dialog" style="display:none;" tabindex="-1">
+<button aria-label="Cerrar mensaje secreto" class="cerrar" onclick="cerrarVentana('mensaje1')">×</button>
+<h2 id="mensaje1Title">Mensaje secreto 💌</h2>
+<p>No importa cuántos loops de la vida pasen, siempre haré return contigo. 🥺</p>
+<p>Incluso si el universo hace un rollback, yo volvería a encontrarte, mi canelita. ❤️‍🔥</p>
+</section>
+<section aria-labelledby="mensaje2Title" aria-modal="false" class="ventana" id="mensaje2" role="dialog" style="display:none;" tabindex="-1">
+<button aria-label="Cerrar poema" class="cerrar" onclick="cerrarVentana('mensaje2')">×</button>
+<h2 id="mensaje2Title">Poema dedicado 📝</h2>
+<p>
           En cada push y commit de nuestro amor,<br/>
           la historia se escribe sin error.<br/>
           Tus ojos son mi mejor función,<br/>
@@ -324,39 +320,33 @@
           te dejo este poema especial.<br/>
           Mi canelita, mi amor sincero,<br/>
           mi código verdadero.<br/><br/>
-        </p>
-      </section>
-
-      <section id="mensaje3" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje3Title" tabindex="-1">
-        <button class="cerrar" aria-label="Cerrar modo mágico" onclick="cerrarVentana('mensaje3')">&times;</button>
-        <h2 id="mensaje3Title">Modo mágico 🌌</h2>
-        <p id="mensajeMagico" style="margin-bottom: 1rem; font-style: italic; font-weight: bold;"></p>
-        <audio id="vozMagica" src="https://files.catbox.moe/pdjk7n.mp3" preload="auto"></audio>
-      </section>
-
-      <section id="mensaje4" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje4Title" tabindex="-1">
-        <button class="cerrar" aria-label="Cerrar confeti rosa" onclick="cerrarVentana('mensaje4')">&times;</button>
-        <h2 id="mensaje4Title">Confeti rosa 🎉</h2>
-        <p>Activa o desactiva el confeti rosa para celebrar nuestro amor sin fin.</p>
-        <button id="btnConfeti" onclick="toggleConfeti()">🎊 Activar/Desactivar Confeti</button>
-      </section>
-    </div>
-  </div>
-
-  <div id="nubePalabras" aria-hidden="true"></div>
-  <canvas id="lluviaCorazonesCanvas" aria-hidden="true"></canvas>
-
-  <div id="audioContainer" aria-label="Control de audio">
-    <audio id="audioFondo" controls autoplay loop>
-      <source src="https://files.catbox.moe/u79a63.mp3" type="audio/mpeg" />
+</p>
+</section>
+<section aria-labelledby="mensaje3Title" aria-modal="false" class="ventana" id="mensaje3" role="dialog" style="display:none;" tabindex="-1">
+<button aria-label="Cerrar modo mágico" class="cerrar" onclick="cerrarVentana('mensaje3')">×</button>
+<h2 id="mensaje3Title">Modo mágico 🌌</h2>
+<p id="mensajeMagico" style="margin-bottom: 1rem; font-style: italic; font-weight: bold;"></p>
+<audio id="vozMagica" preload="auto" src="https://files.catbox.moe/pdjk7n.mp3"></audio>
+</section>
+<section aria-labelledby="mensaje4Title" aria-modal="false" class="ventana" id="mensaje4" role="dialog" style="display:none;" tabindex="-1">
+<button aria-label="Cerrar confeti rosa" class="cerrar" onclick="cerrarVentana('mensaje4')">×</button>
+<h2 id="mensaje4Title">Confeti rosa 🎉</h2>
+<p>Activa o desactiva el confeti rosa para celebrar nuestro amor sin fin.</p>
+<button id="btnConfeti" onclick="toggleConfeti()">🎊 Activar/Desactivar Confeti</button>
+</section>
+</div>
+</div>
+<div aria-hidden="true" id="nubePalabras"></div>
+<canvas aria-hidden="true" id="lluviaCorazonesCanvas"></canvas>
+<div aria-label="Control de audio" id="audioContainer">
+<audio autoplay="" controls="" id="audioFondo" loop="">
+<source src="https://files.catbox.moe/u79a63.mp3" type="audio/mpeg"/>
       Tu navegador no soporta el audio :(
     </audio>
-    <label for="controlVolumen">Volumen:</label>
-    <input id="controlVolumen" type="range" min="0" max="1" step="0.01" value="0.6" />
-  </div>
-
-  <div id="contador" aria-live="polite" aria-atomic="true"></div>
-
+<label for="controlVolumen">Volumen:</label>
+<input id="controlVolumen" max="1" min="0" step="0.01" type="range" value="0.6"/>
+</div>
+<div aria-atomic="true" aria-live="polite" id="contador"></div>
 <script>
   // Ventanas: solo una abierta a la vez
   let magiaInterval = null;
@@ -736,31 +726,61 @@ setInterval(actualizarContador, 1000);
   function enviarBeso() {
     alert("💋 ¡Beso enviado a mi canelita! Te amo muchísimo 💖");
   }
+
+function abrirVentanaGusano() {
+  const ventana = document.getElementById('ventanaGusano');
+  if (ventana) ventana.style.display = 'flex';
+canvas.width = 360;
+canvas.height = 600;
+canvas.style.display = 'block';
+puntajeDiv.style.display = 'block';
+puntos = 0;
+puntajeDiv.textContent = "Puntos: 0";
+gusano.cuerpo = [{ x: 100, y: 100 }];
+gusano.direccion = 'derecha';
+corazon = generarCorazon();
+clearInterval(window._gusanoLoop);
+window._gusanoLoop = setInterval(juego, 150);
+}
+
 </script>
-
-
 <!-- Gusano que atrapa corazones -->
-<canvas id="gameCanvas" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:100;"></canvas>
-<div id="puntaje" style="display:none; position:fixed; top:10px; left:10px; background:rgba(0,0,0,0.6); padding:0.5rem 1rem; border-radius:8px; font-size:1.4rem; z-index:101; color:white; font-family:monospace;">Puntos: 0</div>
+
+<div class="ventana" id="ventanaGusano" style="display:none;">
+<span class="cerrar" onclick="cerrarVentana('ventanaGusano')">×</span>
+<div id="juego-wrapper" style="position: relative; width: 360px; height: 600px; margin: auto; background: #000; border-radius: 20px; overflow: hidden;"><canvas height="600" id="gameCanvas" style="display:block; width:100%; height:auto;" width="360"></canvas><div id="puntaje" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:8px;font-size:1.4rem;color:white;z-index:10;font-family:monospace;">Puntos: 0</div>
+<div id="controles" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;gap:10px;">
+<div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
+<div class="btn-control" onclick="cambiarDireccion('arriba')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬆️</div>
+</div>
+<div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
+<div class="btn-control" onclick="cambiarDireccion('izquierda')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬅️</div>
+<div class="btn-control" onclick="cambiarDireccion('abajo')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬇️</div>
+<div class="btn-control" onclick="cambiarDireccion('derecha')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">➡️</div>
+</div>
+</div>
+</div>
+</div>
+
+
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
 let puntos = 0;
 const puntajeDiv = document.getElementById('puntaje');
-
 const gusano = {
   cuerpo: [{ x: 100, y: 100 }],
   direccion: 'derecha',
   tamaño: 20,
   velocidad: 20
 };
-
 let corazon;
 
-function iniciarJuegoGusano() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+function abrirVentanaGusano() {
+  const ventana = document.getElementById('ventanaGusano');
+  if (ventana) ventana.style.display = 'flex';
+  canvas.width = 360;
+  canvas.height = 600;
   canvas.style.display = 'block';
   puntajeDiv.style.display = 'block';
   puntos = 0;
@@ -771,113 +791,6 @@ function iniciarJuegoGusano() {
   clearInterval(window._gusanoLoop);
   window._gusanoLoop = setInterval(juego, 150);
 }
-
-function generarCorazon() {
-  const cols = Math.floor(canvas.width / gusano.tamaño);
-  const rows = Math.floor(canvas.height / gusano.tamaño);
-  return {
-    x: Math.floor(Math.random() * cols) * gusano.tamaño,
-    y: Math.floor(Math.random() * rows) * gusano.tamaño
-  };
-}
-
-function dibujarGusano() {
-  ctx.fillStyle = '#fff';
-  gusano.cuerpo.forEach(parte => {
-    ctx.beginPath();
-    ctx.arc(parte.x + gusano.tamaño / 2, parte.y + gusano.tamaño / 2, gusano.tamaño / 2, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function dibujarCorazon() {
-  ctx.fillStyle = 'red';
-  const x = corazon.x;
-  const y = corazon.y;
-  const s = gusano.tamaño / 2;
-  ctx.beginPath();
-  ctx.moveTo(x + s, y + s);
-  ctx.arc(x + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
-  ctx.arc(x + s + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
-  ctx.lineTo(x + s, y + s + s);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function moverGusano() {
-  const cabeza = { ...gusano.cuerpo[0] };
-  switch (gusano.direccion) {
-    case 'arriba': cabeza.y -= gusano.velocidad; break;
-    case 'abajo': cabeza.y += gusano.velocidad; break;
-    case 'izquierda': cabeza.x -= gusano.velocidad; break;
-    case 'derecha': cabeza.x += gusano.velocidad; break;
-  }
-  gusano.cuerpo.unshift(cabeza);
-  if (cabeza.x === corazon.x && cabeza.y === corazon.y) {
-    puntos++;
-    puntajeDiv.textContent = `Puntos: ${puntos}`;
-    corazon = generarCorazon();
-  } else {
-    gusano.cuerpo.pop();
-  }
-}
-
-function juego() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  moverGusano();
-  dibujarCorazon();
-  dibujarGusano();
-}
-
-document.addEventListener('keydown', e => {
-  const dir = gusano.direccion;
-  if (e.key === 'ArrowUp' && dir !== 'abajo') gusano.direccion = 'arriba';
-  if (e.key === 'ArrowDown' && dir !== 'arriba') gusano.direccion = 'abajo';
-  if (e.key === 'ArrowLeft' && dir !== 'derecha') gusano.direccion = 'izquierda';
-  if (e.key === 'ArrowRight' && dir !== 'izquierda') gusano.direccion = 'derecha';
-});
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
-
-
-<div class="ventana" id="ventanaGusano">
-  <span class="cerrar" onclick="cerrarVentana('ventanaGusano')">&times;</span>
-  <div id="juego-wrapper" style="position: relative; width: 360px; height: 600px; margin: auto; background: #000; border-radius: 20px; overflow: hidden;">
-    <canvas id="gameCanvas" style="width: 100%; height: auto; max-width: 360px;" width="360" height="600"></canvas>
-    <div id="puntaje" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:8px;font-size:1.4rem;color:white;z-index:10;">Puntos: 0</div>
-    <div id="controles" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;gap:10px;">
-      <div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
-        <div class="btn-control" onclick="cambiarDireccion('arriba')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬆️</div>
-      </div>
-      <div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
-        <div class="btn-control" onclick="cambiarDireccion('izquierda')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬅️</div>
-        <div class="btn-control" onclick="cambiarDireccion('abajo')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬇️</div>
-        <div class="btn-control" onclick="cambiarDireccion('derecha')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">➡️</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-let puntos = 0;
-const puntajeDiv = document.getElementById('puntaje');
-
-const gusano = {
-  cuerpo: [{ x: 100, y: 100 }],
-  direccion: 'derecha',
-  tamaño: 20,
-  velocidad: 20
-};
-
-let corazon = generarCorazon();
 
 function generarCorazon() {
   const cols = Math.floor(canvas.width / gusano.tamaño);
@@ -941,7 +854,13 @@ function juego() {
   dibujarGusano();
 }
 
-setInterval(juego, 150);
+function cambiarDireccion(nueva) {
+  const dir = gusano.direccion;
+  if (nueva === 'arriba' && dir !== 'abajo') gusano.direccion = 'arriba';
+  if (nueva === 'abajo' && dir !== 'arriba') gusano.direccion = 'abajo';
+  if (nueva === 'izquierda' && dir !== 'derecha') gusano.direccion = 'izquierda';
+  if (nueva === 'derecha' && dir !== 'izquierda') gusano.direccion = 'derecha';
+}
 
 document.addEventListener('keydown', e => {
   const dir = gusano.direccion;
@@ -950,15 +869,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' && dir !== 'derecha') gusano.direccion = 'izquierda';
   if (e.key === 'ArrowRight' && dir !== 'izquierda') gusano.direccion = 'derecha';
 });
-
-function cambiarDireccion(nueva) {
-  const dir = gusano.direccion;
-  if (nueva === 'arriba' && dir !== 'abajo') gusano.direccion = 'arriba';
-  if (nueva === 'abajo' && dir !== 'arriba') gusano.direccion = 'abajo';
-  if (nueva === 'izquierda' && dir !== 'derecha') gusano.direccion = 'izquierda';
-  if (nueva === 'derecha' && dir !== 'izquierda') gusano.direccion = 'derecha';
-}
 </script>
+
 </body>
 </html>
-
