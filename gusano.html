@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -148,7 +147,11 @@
       ) return;
 
       gusano.cuerpo.unshift(cabeza);
-      if (cabeza.x === corazon.x && cabeza.y === corazon.y) {
+      
+function estaCerca(a, b, tolerancia = 14) {
+  return Math.abs(a - b) < tolerancia;
+}
+if (estaCerca(cabeza.x, corazon.x) && estaCerca(cabeza.y, corazon.y)) {
         puntos++;
         puntajeDiv.textContent = `Puntos: ${puntos}`;
         corazon = generarCorazon();
@@ -186,5 +189,27 @@
       canvas.height = window.innerHeight - 120;
     });
   </script>
+
+<div id="contador" style="position:fixed;bottom:90px;left:10px;font-size:1.1rem;color:white;font-family:monospace;z-index:1001;">
+  Llevamos juntos: cargando... ❤️
+</div>
+<script>
+const contador = document.getElementById("contador");
+const fechaInicio = new Date("2024-06-16T00:00:00-04:00");
+function actualizarContador() {
+  const ahora = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  const fechaAhora = new Date(ahora);
+  const diff = fechaAhora - fechaInicio;
+  const totalSegundos = Math.floor(diff / 1000);
+  const dias = Math.floor(totalSegundos / (60 * 60 * 24));
+  const horas = Math.floor((totalSegundos % (60 * 60 * 24)) / (60 * 60));
+  const minutos = Math.floor((totalSegundos % (60 * 60)) / 60);
+  const segundos = totalSegundos % 60;
+  contador.textContent = `Llevamos juntos: ${dias} días, ${horas}h ${minutos}m ${segundos}s ❤️`;
+}
+setInterval(actualizarContador, 1000);
+actualizarContador();
+</script>
+
 </body>
 </html>
