@@ -2,49 +2,10 @@
 
 <html lang="es">
 <head>
-<style>
-.btn-control {
-  width: 60px;
-  height: 60px;
-  border: 2px solid white;
-  border-radius: 12px;
-  text-align: center;
-  line-height: 60px;
-  font-size: 1.5rem;
-  background: rgba(255,255,255,0.3);
-  color: white;
-  user-select: none;
-}
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-  }
-  #ventanaGusano {
-    overflow: hidden !important;
-    touch-action: none;
-  }
-</style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title> Para mi canelita 🖤</title>
 <style>
-.btn-control {
-  width: 60px;
-  height: 60px;
-  border: 2px solid white;
-  border-radius: 12px;
-  text-align: center;
-  line-height: 60px;
-  font-size: 1.5rem;
-  background: rgba(255,255,255,0.3);
-  color: white;
-  user-select: none;
-}
-
   * { box-sizing: border-box; }
   body {
     margin: 0; padding: 0;
@@ -240,70 +201,7 @@
     }
   }
 </style>
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-  font-family: monospace;
-}
-#ventanaGusano {
-  position: fixed !important;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-#juego-wrapper {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-canvas#gameCanvas {
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  background: #000;
-}
-#controles {
-  position: relative;
-  bottom: 0;
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-}
-.fila-controles {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-.btn-control {
-  width: 60px;
-  height: 60px;
-  border: 2px solid white;
-  border-radius: 12px;
-  text-align: center;
-  line-height: 60px;
-  font-size: 1.5rem;
-  background: rgba(255,255,255,0.3);
-  color: white;
-  user-select: none;
-}
-</style></head>
+</head>
 <body>
 <h1 aria-label="Terminal de amor" class="typewriter">
     ceo@juliana:~$ echo "Te amo, mi canelita"
@@ -315,16 +213,15 @@ canvas#gameCanvas {
 <button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
 <button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
 <button onclick="enviarBeso()">Enviar beso 💋</button>
-<button onclick="abrirVentanaGusano()">Gusano de Amor 💘</button>
-</div>
+<button onclick="window.open('gusano.html', '_blank')" style="margin-top:1rem;padding:10px 20px;font-size:1rem;">Jugar Gusano de Amor 💘</button></div>
 <div aria-label="Ventanas de mensajes" aria-live="polite" id="ventanas" role="region">
-<section aria-labelledby="mensaje1Title" aria-modal="false" class="ventana" id="mensaje1" role="dialog" style="display:none;" tabindex="-1">
+<section aria-labelledby="mensaje1Title" aria-modal="false" class="ventana" id="mensaje1" role="dialog" tabindex="-1">
 <button aria-label="Cerrar mensaje secreto" class="cerrar" onclick="cerrarVentana('mensaje1')">×</button>
 <h2 id="mensaje1Title">Mensaje secreto 💌</h2>
 <p>No importa cuántos loops de la vida pasen, siempre haré return contigo. 🥺</p>
 <p>Incluso si el universo hace un rollback, yo volvería a encontrarte, mi canelita. ❤️‍🔥</p>
 </section>
-<section aria-labelledby="mensaje2Title" aria-modal="false" class="ventana" id="mensaje2" role="dialog" style="display:none;" tabindex="-1">
+<section aria-labelledby="mensaje2Title" aria-modal="false" class="ventana" id="mensaje2" role="dialog" tabindex="-1">
 <button aria-label="Cerrar poema" class="cerrar" onclick="cerrarVentana('mensaje2')">×</button>
 <h2 id="mensaje2Title">Poema dedicado 📝</h2>
 <p>
@@ -424,13 +321,13 @@ canvas#gameCanvas {
           mi código verdadero.<br/><br/>
 </p>
 </section>
-<section aria-labelledby="mensaje3Title" aria-modal="false" class="ventana" id="mensaje3" role="dialog" style="display:none;" tabindex="-1">
+<section aria-labelledby="mensaje3Title" aria-modal="false" class="ventana" id="mensaje3" role="dialog" tabindex="-1">
 <button aria-label="Cerrar modo mágico" class="cerrar" onclick="cerrarVentana('mensaje3')">×</button>
 <h2 id="mensaje3Title">Modo mágico 🌌</h2>
 <p id="mensajeMagico" style="margin-bottom: 1rem; font-style: italic; font-weight: bold;"></p>
 <audio id="vozMagica" preload="auto" src="https://files.catbox.moe/pdjk7n.mp3"></audio>
 </section>
-<section aria-labelledby="mensaje4Title" aria-modal="false" class="ventana" id="mensaje4" role="dialog" style="display:none;" tabindex="-1">
+<section aria-labelledby="mensaje4Title" aria-modal="false" class="ventana" id="mensaje4" role="dialog" tabindex="-1">
 <button aria-label="Cerrar confeti rosa" class="cerrar" onclick="cerrarVentana('mensaje4')">×</button>
 <h2 id="mensaje4Title">Confeti rosa 🎉</h2>
 <p>Activa o desactiva el confeti rosa para celebrar nuestro amor sin fin.</p>
@@ -615,23 +512,14 @@ canvas#gameCanvas {
 
   // Contador de días juntos (365 fijo)
   const contador = document.getElementById("contador");
-  const fechaInicio = new Date("2024-06-16T00:00:00-04:00"); // 16 de junio de 2024, hora NY
-  
-function actualizarContador() {
-  const ahora = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-  const fechaAhora = new Date(ahora);
-  const diff = fechaAhora - fechaInicio;
-
-  const totalSegundos = Math.floor(diff / 1000);
-  const dias = Math.floor(totalSegundos / (60 * 60 * 24));
-  const horas = Math.floor((totalSegundos % (60 * 60 * 24)) / (60 * 60));
-  const minutos = Math.floor((totalSegundos % (60 * 60)) / 60);
-  const segundos = totalSegundos % 60;
-
-  contador.textContent = `Llevamos juntos: ${dias} días, ${horas}h ${minutos}m ${segundos}s ❤️`;
-}
-setInterval(actualizarContador, 1000);
-
+  const fechaInicio = new Date(2023, 5, 30); // Ajusta a tu fecha, junio es 5 porque enero=0
+  function actualizarContador() {
+    const hoy = new Date();
+    const diff = hoy.getTime() - fechaInicio.getTime();
+    // Aquí fijo en 365 días como pediste:
+    const dias = 365;
+    contador.textContent = `Llevamos juntos: ${dias} días ❤️`;
+  }
   actualizarContador();
 
   // Modo mágico: 200 mensajes mágicos con voz
@@ -800,7 +688,7 @@ setInterval(actualizarContador, 1000);
   let indiceMagico = 0;
   function activarMagia() {
     mostrarMensajeMagico();
-    magiaInterval = setInterval(mostrarMensajeMagico, 3000);
+    magiaInterval = setInterval(mostrarMensajeMagico, 8000);
   }
   function detenerMagia() {
     clearInterval(magiaInterval);
@@ -828,160 +716,6 @@ setInterval(actualizarContador, 1000);
   function enviarBeso() {
     alert("💋 ¡Beso enviado a mi canelita! Te amo muchísimo 💖");
   }
-
-function abrirVentanaGusano() {
-  const ventana = document.getElementById('ventanaGusano');
-  if (ventana) ventana.style.display = 'flex';
-canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-canvas.height = window.innerHeight;
-canvas.style.display = 'block';
-puntajeDiv.style.display = 'block';
-puntos = 0;
-puntajeDiv.textContent = "Puntos: 0";
-gusano.cuerpo = [{ x: 100, y: 100 }];
-gusano.direccion = 'derecha';
-corazon = generarCorazon();
-clearInterval(window._gusanoLoop);
-window._gusanoLoop = setInterval(juego, 150);
-}
-
-
-function cerrarVentanaGusano() {
-  const ventana = document.getElementById('ventanaGusano');
-  if (ventana) ventana.style.display = 'none';
-  clearInterval(window._gusanoLoop);
-}
-</script>
-<!-- Gusano que atrapa corazones -->
-<div class="ventana" id="ventanaGusano" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000;"><button id="cerrarGusano" onclick="cerrarVentanaGusano()" style="position:absolute;top:10px;right:10px;padding:0.5rem 1rem;font-size:1.5rem;color:#fff;background:transparent;border:none;cursor:pointer;z-index:1001;">✖</button>
-<span class="cerrar" onclick="cerrarVentana('ventanaGusano')">×</span>
-<div id="juego-wrapper" style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; overflow: hidden;"><canvas height="600" id="gameCanvas" style="position:absolute; top:0; left:0; width:100vw; height:100vh; display:block;" width="360"></canvas><div id="puntaje" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:8px;font-size:1.4rem;color:white;z-index:10;font-family:monospace;">Puntos: 0</div>
-<div id="controles" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;gap:10px;">
-<div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
-<div class="btn-control" onclick="cambiarDireccion('arriba')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬆️</div>
-</div>
-<div class="fila-controles" style="display:flex;justify-content:center;gap:10px;">
-<div class="btn-control" onclick="cambiarDireccion('izquierda')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬅️</div>
-<div class="btn-control" onclick="cambiarDireccion('abajo')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">⬇️</div>
-<div class="btn-control" onclick="cambiarDireccion('derecha')" style="width:60px;height:60px;border:2px solid white;border-radius:12px;text-align:center;line-height:60px;font-size:1.5rem;background:rgba(255,255,255,0.3);color:white;">➡️</div>
-</div>
-</div>
-</div>
-</div>
-<script>
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-let puntos = 0;
-const puntajeDiv = document.getElementById('puntaje');
-const gusano = {
-  cuerpo: [{ x: 100, y: 100 }],
-  direccion: 'derecha',
-  tamaño: 12,
-  velocidad: 12
-};
-let corazon;
-
-function abrirVentanaGusano() {
-  const ventana = document.getElementById('ventanaGusano');
-  if (ventana) ventana.style.display = 'flex';
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.height = window.innerHeight;
-  canvas.style.display = 'block';
-  puntajeDiv.style.display = 'block';
-  puntos = 0;
-  puntajeDiv.textContent = "Puntos: 0";
-  gusano.cuerpo = [{ x: 100, y: 100 }];
-  gusano.direccion = 'derecha';
-  corazon = generarCorazon();
-  clearInterval(window._gusanoLoop);
-  window._gusanoLoop = setInterval(juego, 150);
-}
-
-function generarCorazon() {
-  const cols = Math.floor(canvas.width / gusano.tamaño);
-  const rows = Math.floor(canvas.height / gusano.tamaño);
-  return {
-    x: Math.floor(Math.random() * cols) * gusano.tamaño,
-    y: Math.floor(Math.random() * rows) * gusano.tamaño
-  };
-}
-
-function dibujarGusano() {
-  ctx.fillStyle = '#fff';
-  gusano.cuerpo.forEach(parte => {
-    ctx.beginPath();
-    ctx.arc(parte.x + gusano.tamaño / 2, parte.y + gusano.tamaño / 2, gusano.tamaño / 2, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function dibujarCorazon() {
-  ctx.fillStyle = 'red';
-  const x = corazon.x;
-  const y = corazon.y;
-  const s = gusano.tamaño / 2;
-  ctx.beginPath();
-  ctx.moveTo(x + s, y + s);
-  ctx.arc(x + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
-  ctx.arc(x + s + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
-  ctx.lineTo(x + s, y + s + s);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function moverGusano() {
-  const cabeza = { ...gusano.cuerpo[0] };
-  switch (gusano.direccion) {
-    case 'arriba': cabeza.y -= gusano.velocidad; break;
-    case 'abajo': cabeza.y += gusano.velocidad; break;
-    case 'izquierda': cabeza.x -= gusano.velocidad; break;
-    case 'derecha': cabeza.x += gusano.velocidad; break;
-  }
-
-  if (cabeza.x < 0 || cabeza.x >= canvas.width || cabeza.y < 0 || cabeza.y >= canvas.height) {
-    return;
-  }
-
-  gusano.cuerpo.unshift(cabeza);
-  if (cabeza.x === corazon.x && cabeza.y === corazon.y) {
-    puntos++;
-    puntajeDiv.textContent = `Puntos: ${puntos}`;
-    corazon = generarCorazon();
-  } else {
-    gusano.cuerpo.pop();
-  }
-}
-
-function juego() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  moverGusano();
-  dibujarCorazon();
-  dibujarGusano();
-}
-
-function cambiarDireccion(nueva) {
-  const dir = gusano.direccion;
-  if (nueva === 'arriba' && dir !== 'abajo') gusano.direccion = 'arriba';
-  if (nueva === 'abajo' && dir !== 'arriba') gusano.direccion = 'abajo';
-  if (nueva === 'izquierda' && dir !== 'derecha') gusano.direccion = 'izquierda';
-  if (nueva === 'derecha' && dir !== 'izquierda') gusano.direccion = 'derecha';
-}
-
-document.addEventListener('keydown', e => {
-  const dir = gusano.direccion;
-  if (e.key === 'ArrowUp' && dir !== 'abajo') gusano.direccion = 'arriba';
-  if (e.key === 'ArrowDown' && dir !== 'arriba') gusano.direccion = 'abajo';
-  if (e.key === 'ArrowLeft' && dir !== 'derecha') gusano.direccion = 'izquierda';
-  if (e.key === 'ArrowRight' && dir !== 'izquierda') gusano.direccion = 'derecha';
-});
-
-function cerrarVentanaGusano() {
-  const ventana = document.getElementById('ventanaGusano');
-  if (ventana) ventana.style.display = 'none';
-  clearInterval(window._gusanoLoop);
-}
 </script>
 </body>
 </html>
