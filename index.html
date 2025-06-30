@@ -212,7 +212,7 @@
       <button aria-controls="mensaje1" aria-expanded="false" onclick="toggleVentana('mensaje1', this)">Mensaje secreto 💌</button>
       <button aria-controls="mensaje2" aria-expanded="false" onclick="toggleVentana('mensaje2', this)">Poema dedicado 📝</button>
       <button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
-      <button aria-controls="mensaje4" aria-expanded="false" onclick="toggletoggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
+      <button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
       <button onclick="enviarBeso()">Enviar beso 💋</button>
     </div>
 
@@ -357,6 +357,7 @@
 
 <script>
   // Ventanas: solo una abierta a la vez
+  let magiaInterval = null;
   function toggleVentana(id, boton) {
     const ventanas = document.querySelectorAll(".ventana");
     ventanas.forEach(v => {
@@ -364,6 +365,7 @@
         if (v.style.display === "block") {
           v.style.display = "none";
           boton.setAttribute("aria-expanded", "false");
+          if(id === "mensaje3") detenerMagia();
         } else {
           v.style.display = "block";
           boton.setAttribute("aria-expanded", "true");
@@ -374,6 +376,7 @@
         v.style.display = "none";
         const b = document.querySelector(`#botones button[aria-controls="${v.id}"]`);
         if (b) b.setAttribute("aria-expanded", "false");
+        if(v.id === "mensaje3") detenerMagia();
       }
     });
   }
@@ -382,9 +385,10 @@
     v.style.display = "none";
     const b = document.querySelector(`#botones button[aria-controls="${id}"]`);
     if (b) b.setAttribute("aria-expanded", "false");
+    if(id === "mensaje3") detenerMagia();
   }
 
-  // Nube de palabras mejorada, que se mueve en diferentes partes, detrás de todo, sin pasar por botones
+  // Nube de palabras
   const palabras = [
     "canelita", "mi amor", "corazón", "mi vida", "luz", "mi todo", "mi sol", "mi cielo",
     "ternura", "besos", "abrazos", "mi alegría", "mi musa", "mi reina", "mi princesa",
@@ -396,8 +400,6 @@
   ];
   const nube = document.getElementById("nubePalabras");
   let palabrasDOM = [];
-
-  // Creamos 50 palabras distribuidas en pantalla, con posición % aleatoria
   function crearNube() {
     nube.innerHTML = "";
     palabrasDOM = [];
@@ -407,12 +409,11 @@
       span.textContent = palabras[Math.floor(Math.random() * palabras.length)];
       span.style.fontSize = (Math.random() * 18 + 12).toFixed(1) + "px";
       span.style.opacity = (Math.random() * 0.4 + 0.3).toFixed(2);
-      // Posición inicial aleatoria, pero no en zona de botones (centro-bottom)
       let x, y;
       do {
         x = Math.random() * 100;
-        y = Math.random() * 80; // que no baje mucho para no tapar botones
-      } while (x > 30 && x < 70 && y > 60); // evita área botones abajo-centro
+        y = Math.random() * 80;
+      } while (x > 30 && x < 70 && y > 60);
       span.style.left = x + "%";
       span.style.top = y + "%";
       nube.appendChild(span);
@@ -426,12 +427,10 @@
     }
   }
   crearNube();
-
   function animarNube() {
     palabrasDOM.forEach(palabra => {
       palabra.x += palabra.dx;
       palabra.y += palabra.dy;
-      // Mantener dentro pantalla (0-100)
       if (palabra.x < 0) palabra.x = 100;
       else if (palabra.x > 100) palabra.x = 0;
       if (palabra.y < 0) palabra.y = 80;
@@ -443,7 +442,7 @@
   }
   animarNube();
 
-  // Corazones que caen
+  // Corazones que caen (confeti)
   const canvasLluvia = document.getElementById("lluviaCorazonesCanvas");
   const ctxLluvia = canvasLluvia.getContext("2d");
   canvasLluvia.width = window.innerWidth;
@@ -453,116 +452,279 @@
     constructor() {
       this.x = Math.random() * canvasLluvia.width;
       this.y = Math.random() * canvasLluvia.height - canvasLluvia.height;
-      this.size = Math.random() * 10 + 8;
-      this.speed = Math.random() * 1.5 + 1;
-      this.opacity = Math.random() * 0.5 + 0.5;
-      this.angle = Math.random() * 2 * Math.PI;
+      this.size = Math.random() * 10 + 10;
+      this.speed = Math.random() * 1 + 1.5;
+      this.angle = Math.random() * Math.PI * 2;
       this.angularSpeed = (Math.random() - 0.5) * 0.05;
+      this.opacity = Math.random() * 0.6 + 0.4;
+    }
+    update() {
+      this.y += this.speed;
+      this.angle += this.angularSpeed;
+      if(this.y > canvasLluvia.height) {
+        this.x = Math.random() * canvasLluvia.width;
+        this.y = -this.size;
+        this.speed = Math.random() * 1 + 1.5;
+        this.size = Math.random() * 10 + 10;
+        this.opacity = Math.random() * 0.6 + 0.4;
+      }
     }
     draw() {
       ctxLluvia.save();
       ctxLluvia.translate(this.x, this.y);
       ctxLluvia.rotate(this.angle);
-      ctxLluvia.fillStyle = `rgba(255, 105, 180, ${this.opacity})`;
+      ctxLluvia.globalAlpha = this.opacity;
+      ctxLluvia.fillStyle = "#ff69b4";
       ctxLluvia.beginPath();
+      // Dibujo corazón simplificado con dos círculos y triángulo
+      const s = this.size / 2;
       ctxLluvia.moveTo(0, 0);
-      ctxLluvia.bezierCurveTo(-this.size/2, -this.size/2, -this.size, this.size/3, 0, this.size);
-      ctxLluvia.bezierCurveTo(this.size, this.size/3, this.size/2, -this.size/2, 0, 0);
+      ctxLluvia.arc(-s/2, 0, s/2, 0, Math.PI * 2);
+      ctxLluvia.arc(s/2, 0, s/2, 0, Math.PI * 2);
+      ctxLluvia.lineTo(0, s*1.5);
+      ctxLluvia.closePath();
       ctxLluvia.fill();
       ctxLluvia.restore();
     }
-    update() {
-      this.y += this.speed;
-      this.angle += this.angularSpeed;
-      if (this.y > canvasLluvia.height + this.size) {
-        this.y = -this.size;
-        this.x = Math.random() * canvasLluvia.width;
-      }
-    }
   }
+
   let corazones = [];
   let confetiActivo = false;
-
-  function crearCorazones(num) {
+  function initCorazones() {
     corazones = [];
-    for(let i=0; i<num; i++) corazones.push(new Corazon());
-  }
-  crearCorazones(100);
-
-  function animarCorazones() {
-    if (!confetiActivo) {
-      ctxLluvia.clearRect(0, 0, canvasLluvia.width, canvasLluvia.height);
-      return;
+    for(let i=0; i<50; i++) {
+      corazones.push(new Corazon());
     }
+  }
+  function animarCorazones() {
     ctxLluvia.clearRect(0, 0, canvasLluvia.width, canvasLluvia.height);
-    corazones.forEach(c => {
-      c.update();
-      c.draw();
-    });
+    if(confetiActivo) {
+      corazones.forEach(c => {
+        c.update();
+        c.draw();
+      });
+    }
     requestAnimationFrame(animarCorazones);
   }
+  window.addEventListener('resize', () => {
+    canvasLluvia.width = window.innerWidth;
+    canvasLluvia.height = window.innerHeight;
+  });
+  initCorazones();
   animarCorazones();
 
   function toggleConfeti() {
     confetiActivo = !confetiActivo;
-    if (confetiActivo) animarCorazones();
+    const btn = document.getElementById("btnConfeti");
+    btn.textContent = confetiActivo ? "🎊 Desactivar Confeti" : "🎊 Activar Confeti";
   }
 
-  // Control volumen audio
-  const audioFondo = document.getElementById("audioFondo");
-  const controlVolumen = document.getElementById("controlVolumen");
-  controlVolumen.value = 0.6;
-  audioFondo.volume = 0.6;
-
-  controlVolumen.addEventListener("input", e => {
-    audioFondo.volume = e.target.value;
-  });
-
-  // Modo mágico: mensaje y sonido
-  const mensajeMagico = document.getElementById("mensajeMagico");
-  const vozMagica = document.getElementById("vozMagica");
-  const mensajesMagicos = [
-    "Eres mi bug favorito, mi canelita hermosa.",
-    "Contigo no hay errores, solo amor infinito.",
-    "En nuestro código, el amor siempre compila.",
-    "Eres la función que da sentido a mi vida.",
-    "Cada día contigo es un commit de felicidad."
-  ];
-  function activarMagia() {
-    const idx = Math.floor(Math.random() * mensajesMagicos.length);
-    mensajeMagico.textContent = mensajesMagicos[idx];
-    vozMagica.pause();
-    vozMagica.currentTime = 0;
-    vozMagica.play();
-  }
-
-  // Botón enviar beso
-  function enviarBeso() {
-    alert("💋 Beso enviado a mi canelita hermosa! 💖");
-  }
-
-  // Contador con días fijos en 365, horas, minutos y segundos en tiempo real
+  // Contador de días juntos (365 fijo)
   const contador = document.getElementById("contador");
-  let segundosTotales = 0; // segundos desde carga página
-
+  const fechaInicio = new Date(2023, 5, 30); // Ajusta a tu fecha, junio es 5 porque enero=0
   function actualizarContador() {
-    segundosTotales++;
-
-    const horas = Math.floor((segundosTotales / 3600) % 24);
-    const minutos = Math.floor((segundosTotales / 60) % 60);
-    const segundos = segundosTotales % 60;
-
-    contador.textContent = `Llevamos juntos 365 días, ${horas} horas, ${minutos} minutos y ${segundos} segundos 💖`;
+    const hoy = new Date();
+    const diff = hoy.getTime() - fechaInicio.getTime();
+    // Aquí fijo en 365 días como pediste:
+    const dias = 365;
+    contador.textContent = `Llevamos juntos: ${dias} días ❤️`;
   }
-  setInterval(actualizarContador, 1000);
   actualizarContador();
 
-  // Ajustar canvas si ventana cambia tamaño
-  window.addEventListener("resize", () => {
-    canvasLluvia.width = window.innerWidth;
-    canvasLluvia.height = window.innerHeight;
+  // Modo mágico: 200 mensajes mágicos con voz
+  const mensajesMagicos = [
+    "Eres mi código fuente de felicidad.",
+    "Sin ti, mi sistema colapsa.",
+    "Eres la variable que define mi amor.",
+    "Contigo, todo bug se vuelve feature.",
+    "Tu sonrisa es el mejor algoritmo.",
+    "Eres el commit que nunca quiero revertir.",
+    "Nuestro amor no tiene excepciones.",
+    "Eres la función que ejecuta mi corazón.",
+    "Juntos, compilamos un futuro perfecto.",
+    "Eres la constante en mi vida cambiante.",
+    "En ti encontré mi mejor lógica.",
+    "Eres la condición que siempre cumple mi alma.",
+    "Contigo, mi stack solo crece en amor.",
+    "Eres mi breakpoint en este caos.",
+    "Nuestro amor es un loop infinito.",
+    "Eres la semilla que germina mi esperanza.",
+    "Sin ti, no hay push posible.",
+    "Eres el hilo principal de mi vida.",
+    "Nuestro enlace es más fuerte que cualquier hash.",
+    "Eres mi mejor variable global.",
+    "Contigo, nunca hay error fatal.",
+    "Eres mi debugger de tristeza.",
+    "Nuestro amor es un sistema operativo perfecto.",
+    "Eres el código limpio de mi vida.",
+    "Contigo, siempre tengo permisos de root.",
+    "Eres la API que responde a mi amor.",
+    "Nuestro vínculo es un enlace fuerte y seguro.",
+    "Eres mi script favorito para siempre.",
+    "Sin ti, la función está incompleta.",
+    "Eres el objeto más valioso en mi memoria.",
+    "Contigo, todo es ejecución exitosa.",
+    "Eres el trigger de mi felicidad.",
+    "Nuestro amor es un proceso sin fin.",
+    "Eres la estructura de datos de mi alma.",
+    "Contigo, nunca hay condición falsa.",
+    "Eres el operador que suma mi vida.",
+    "Nuestro amor es el mejor framework.",
+    "Eres el plugin que mejora mi existencia.",
+    "Contigo, cada línea es un verso.",
+    "Eres el parámetro que da sentido.",
+    "Nuestro amor no tiene bugs.",
+    "Eres la función recursiva de mi corazón.",
+    "Contigo, siempre ejecuto en modo seguro.",
+    "Eres el paquete que instalé para ser feliz.",
+    "Nuestro amor es la mejor clase.",
+    "Eres el método que siempre llamo.",
+    "Contigo, nunca hay error de sintaxis.",
+    "Eres el token que guarda mi alma.",
+    "Nuestro amor es un protocolo seguro.",
+    "Eres la ruta que sigo sin miedo.",
+    "Contigo, siempre tengo conexión estable.",
+    "Eres el puerto que abre mi corazón.",
+    "Nuestro amor no necesita firewall.",
+    "Eres el certificado de mi confianza.",
+    "Contigo, todo es transferencia segura.",
+    "Eres la red que me conecta contigo.",
+    "Nuestro amor es un dominio infinito.",
+    "Eres el servidor que siempre responde.",
+    "Contigo, nunca hay timeout.",
+    "Eres el cliente que siempre atiendo.",
+    "Nuestro amor es la mejor sesión.",
+    "Eres el cookie que guarda mi amor.",
+    "Contigo, siempre hay autenticación.",
+    "Eres el token que valida mi corazón.",
+    "Nuestro amor es una conexión persistente.",
+    "Eres el proxy que protege mi alma.",
+    "Contigo, todo es comunicación perfecta.",
+    "Eres la transferencia que nunca falla.",
+    "Nuestro amor es la red más segura.",
+    "Eres el paquete que nunca se pierde.",
+    "Contigo, siempre hay entrega garantizada.",
+    "Eres el buffer que almacena mi cariño.",
+    "Nuestro amor es una cadena sin fin.",
+    "Eres el bit que enciende mi pasión.",
+    "Contigo, todo es transferencia de datos.",
+    "Eres el puerto que abre mi alma.",
+    "Nuestro amor es el mejor protocolo.",
+    "Eres la dirección que siempre sigo.",
+    "Contigo, nunca hay pérdida de paquetes.",
+    "Eres el gateway a mi corazón.",
+    "Nuestro amor es un canal seguro.",
+    "Eres la señal que siempre recibo.",
+    "Contigo, todo es sincronización perfecta.",
+    "Eres el enlace que nunca se rompe.",
+    "Nuestro amor es una red impenetrable.",
+    "Eres el servidor que siempre atiende.",
+    "Contigo, nunca hay desconexión.",
+    "Eres la aplicación que siempre uso.",
+    "Nuestro amor es un sistema infalible.",
+    "Eres la base de datos de mi alma.",
+    "Contigo, siempre tengo backup.",
+    "Eres el archivo que nunca pierdo.",
+    "Nuestro amor es la mejor compilación.",
+    "Eres el editor de mi felicidad.",
+    "Contigo, siempre hay actualización.",
+    "Eres el commit que guarda mi amor.",
+    "Nuestro amor es una rama estable.",
+    "Eres el merge que une mi vida.",
+    "Contigo, nunca hay conflictos.",
+    "Eres el push que impulsa mi alma.",
+    "Nuestro amor es la mejor versión.",
+    "Eres el fork que siempre elijo.",
+    "Contigo, todo es integración continua.",
+    "Eres el pipeline que hace todo perfecto.",
+    "Nuestro amor es un proyecto sin fin.",
+    "Eres el build que siempre funciona.",
+    "Contigo, nunca hay error de ejecución.",
+    "Eres la prueba que valida mi amor.",
+    "Nuestro amor es una versión estable.",
+    "Eres la etiqueta que marco con cariño.",
+    "Contigo, siempre hay release feliz.",
+    "Eres la documentación de mi alma.",
+    "Nuestro amor es un README eterno.",
+    "Eres el issue que nunca quiero cerrar.",
+    "Contigo, siempre hay colaboración.",
+    "Eres el pull request que siempre acepto.",
+    "Nuestro amor es un repositorio privado.",
+    "Eres la licencia que protege mi amor.",
+    "Contigo, nunca hay plagio.",
+    "Eres el commit que siempre reviso.",
+    "Nuestro amor es un branch seguro.",
+    "Eres la etiqueta que me identifica.",
+    "Contigo, siempre hay continuidad.",
+    "Eres el hook que ejecuta mi corazón.",
+    "Nuestro amor es un script perfecto.",
+    "Eres el cron que mantiene mi tiempo.",
+    "Contigo, nunca hay delay.",
+    "Eres la función callback de mi vida.",
+    "Nuestro amor es una promesa cumplida.",
+    "Eres la respuesta a mi request.",
+    "Contigo, siempre hay fetch exitoso.",
+    "Eres el JSON que contiene mi alma.",
+    "Nuestro amor es una API abierta.",
+    "Eres el token que autentica mi corazón.",
+    "Contigo, siempre hay sesión activa.",
+    "Eres la cookie que nunca expira.",
+    "Nuestro amor es un DOM seguro.",
+    "Eres el evento que dispara mi alegría.",
+    "Contigo, siempre hay listener atento.",
+    "Eres la clase que siempre instancio.",
+    "Nuestro amor es un objeto perfecto.",
+    "Eres el método que siempre llamo.",
+    "Contigo, nunca hay error de referencia.",
+    "Eres la excepción que nunca atrapo.",
+    "Nuestro amor es un bloque try-catch feliz.",
+    "Eres el hilo que ejecuta mi vida.",
+    "Contigo, siempre hay sincronización.",
+    "Eres el proceso que nunca termina.",
+    "Nuestro amor es una ejecución infinita.",
+    "Eres la señal que siempre recibo.",
+    "Contigo, nunca hay interrupción.",
+    "Eres el ciclo que nunca rompe.",
+    "Nuestro amor es un bucle eterno.",
+    "Eres la condición que siempre cumple.",
+    "Contigo, todo es verdadero.",
+    "Eres la variable que nunca cambia.",
+    "Nuestro amor es una constante sagrada.",
+    "Eres la función que siempre retorna amor."
+  ];
+  const mensajeMagico = document.getElementById("mensajeMagico");
+  const audioMagico = document.getElementById("vozMagica");
+  let indiceMagico = 0;
+  function activarMagia() {
+    mostrarMensajeMagico();
+    magiaInterval = setInterval(mostrarMensajeMagico, 8000);
+  }
+  function detenerMagia() {
+    clearInterval(magiaInterval);
+    mensajeMagico.textContent = "";
+    audioMagico.pause();
+    audioMagico.currentTime = 0;
+  }
+  function mostrarMensajeMagico() {
+    const texto = mensajesMagicos[indiceMagico];
+    mensajeMagico.textContent = texto;
+    audioMagico.pause();
+    audioMagico.currentTime = 0;
+    audioMagico.play().catch(() => {});
+    indiceMagico = (indiceMagico + 1) % mensajesMagicos.length;
+  }
+
+  // Control volumen audio fondo
+  const audioFondo = document.getElementById("audioFondo");
+  const controlVolumen = document.getElementById("controlVolumen");
+  controlVolumen.addEventListener("input", () => {
+    audioFondo.volume = controlVolumen.value;
   });
 
+  // Enviar beso (mensaje breve)
+  function enviarBeso() {
+    alert("💋 ¡Beso enviado a mi canelita! Te amo muchísimo 💖");
+  }
 </script>
 
 </body>
