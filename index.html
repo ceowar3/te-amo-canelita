@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Para mi canelita 🖤</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    background: #000;
+    color: #ff69b4;
+    font-family: 'Courier New', monospace;
+    overflow-y: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1.typewriter {
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    white-space: nowrap;
+    border-right: 0.15em solid #ff69b4;
+    animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
+  }
+  @keyframes typing { from { width: 0 } to { width: 100% } }
+  @keyframes blink { 50% { border-color: transparent } }
+
+  #contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    max-width: 900px;
+    width: 90vw;
+    position: relative; /* para capas internas */
+    z-index: 10; /* encima de la nube */
+  }
+
+  #botones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  button {
+    background: #ff69b4;
+    color: #000;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #ff85c1;
+  }
+
+  #ventanas {
+    width: 100%;
+    max-width: 700px;
+  }
+  .ventana {
+    background: #111;
+    border: 2px solid #ff69b4;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: none;
+    color: #ff69b4;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    position: relative;
+    z-index: 10; /* encima de la nube */
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .ventana p {
+    margin: 0.5rem 0;
+  }
+  .cerrar {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #ff69b4;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .cerrar:hover {
+    color: #fff;
+  }
+
+  /* Nube de palabras */
+  #nubePalabras {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* que no interfiera */
+    z-index: 0; /* detrás de todo */
+    overflow: visible;
+  }
+  #nubePalabras span {
+    position: absolute;
+    color: #ff69b4;
+    font-family: monospace;
+    user-select: none;
+    white-space: nowrap;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+  #nubePalabras span:hover {
+    opacity: 1;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  #lluviaCorazonesCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0; /* mismo nivel que nube */
+  }
+
+  #audioContainer {
+    margin-top: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  #controlVolumen {
+    margin-left: 0.5rem;
+  }
+
+  #contador {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative;
+    z-index: 10;
+  }
+
+  @media (max-width: 600px) {
+    #contenedor {
+      width: 95vw;
+    }
+    #ventanas {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <h1 class="typewriter" aria-label="Terminal de amor">
+    ceo@juliana:~$ echo "Te amo, mi canelita"
+  </h1>
+
+  <div id="contenedor">
+    <div id="botones" role="navigation" aria-label="Menú de mensajes">
+      <button aria-controls="mensaje1" aria-expanded="false" onclick="toggleVentana('mensaje1', this)">Mensaje secreto 💌</button>
+      <button aria-controls="mensaje2" aria-expanded="false" onclick="toggleVentana('mensaje2', this)">Poema dedicado 📝</button>
+      <button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
+      <button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
+      <button onclick="enviarBeso()">Enviar beso 💋</button>
+    </div>
+
+    <div id="ventanas" role="region" aria-live="polite" aria-label="Ventanas de mensajes">
+      <section id="mensaje1" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje1Title" tabindex="-1">
+        <button class="cerrar" aria-label="Cerrar mensaje secreto" onclick="cerrarVentana('mensaje1')">&times;</button>
+        <h2 id="mensaje1Title">Mensaje secreto 💌</h2>
+        <p>No importa cuántos loops de la vida pasen, siempre haré return contigo. 🥺</p>
+        <p>Incluso si el universo hace un rollback, yo volvería a encontrarte, mi canelita. ❤️‍🔥</p>
+      </section>
+
+      <section id="mensaje2" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje2Title" tabindex="-1">
+        <button class="cerrar" aria-label="Cerrar poema" onclick="cerrarVentana('mensaje2')">&times;</button>
+        <h2 id="mensaje2Title">Poema dedicado 📝</h2>
+        <p>
+        En cada push y commit de nuestro amor,<br/>
+        la historia se escribe sin error.<br/>
+        Tus ojos son mi mejor función,<br/>
+        y tus abrazos mi mejor condición.<br/><br/>
+
+        Mi canelita, luz que me guía,<br/>
+        en el código de mi día.<br/>
+        Cada línea que pienso en ti,<br/>
+        es un bucle infinito de sentir.<br/><br/>
+
+        Juntos depuramos la tristeza,<br/>
+        con cada risa, con cada pieza.<br/>
+        Nuestra rama crece sin cesar,<br/>
+        en el repositorio del amar.<br/><br/>
+
+        Así, mi amor, en este mundo virtual,<br/>
+        eres mi commit más especial.<br/>
+        Te amo más allá del bit,<br/>
+        mi canelita, mi código, mi hit.<br/><br/>
+
+        Nuestro amor es un bucle eterno,<br/>
+        sin break ni fin, siempre tierno.<br/>
+        Cada día un nuevo push de pasión,<br/>
+        construyendo nuestra conexión.<br/><br/>
+
+        Eres la variable que da sentido,<br/>
+        en este programa compartido.<br/>
+        Tus ojos, el debugger de mi alma,<br/>
+        que me guía y me calma.<br/><br/>
+
+        En el IDE de mi corazón,<br/>
+        eres la función, la condición.<br/>
+        Sin ti, mi código no compila,<br/>
+        contigo, la vida brilla.<br/><br/>
+
+        Cada commit es una promesa,<br/>
+        de amor puro y sin pereza.<br/>
+        En nuestra rama, sólo hay luz,<br/>
+        porque contigo todo es plus.<br/><br/>
+
+        En el repositorio de mis sueños,<br/>
+        tú eres el branch sin dueños.<br/>
+        Mi canelita, mi gran inspiración,<br/>
+        eres el core de mi creación.<br/><br/>
+
+        Así, seguimos programando,<br/>
+        con amor siempre actualizando.<br/>
+        Sin bugs, sin errores, sólo ternura,<br/>
+        una relación llena de pura hermosura.<br/><br/>
+
+        Nuestro deploy es el destino,<br/>
+        con cada beso, un nuevo camino.<br/>
+        En este servidor llamado vida,<br/>
+        tú eres mi mejor salida.<br/><br/>
+
+        Con cada push, con cada merge,<br/>
+        nuestro amor nunca se pierde.<br/>
+        Eres mi código limpio y claro,<br/>
+        mi canelita, mi raro amparo.<br/><br/>
+
+        No hay rollback que nos destruya,<br/>
+        ni virus que nos destruya.<br/>
+        Somos un sistema robusto y fuerte,<br/>
+        juntos hasta la muerte.<br/><br/>
+
+        En la terminal de mi alma,<br/>
+        tú eres la línea que calma.<br/>
+        Mi canelita, mi bug perfecto,<br/>
+        mi amor en código correcto.<br/><br/>
+
+        Y así seguimos codificando,<br/>
+        nuestro amor eternizando.<br/>
+        Porque en este mundo virtual,<br/>
+        tú eres mi vida real.<br/><br/>
+
+        Te amo más allá del pixel,<br/>
+        más allá del click y del switchel.<br/>
+        Mi canelita, mi eterna función,<br/>
+        mi código y mi canción.<br/><br/>
+
+        Eres la lógica que me envuelve,<br/>
+        el algoritmo que me resuelve.<br/>
+        Mi corazón es un array,<br/>
+        donde tú siempre estás.<br/><br/>
+
+        No importa el lenguaje o la plataforma,<br/>
+        contigo siempre hay una norma.<br/>
+        De amor puro y sincero,<br/>
+        contigo siempre me quiero.<br/><br/>
+
+        Así que en esta línea final,<br/>
+        te dejo este poema especial.<br/>
+        Mi canelita, mi amor sincero,<br/>
+        mi código verdadero.<br/><br/>
+        </p>
+      </section>
+
+      <section id="mensaje3" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje3Title" tabindex="-1">
+        <button class="cerrar" aria-label="Cerrar modo mágico" onclick="cerrarVentana('mensaje3')">&times;</button>
+        <h2 id="mensaje3Title">Modo mágico 🌌</h2>
+        <p id="mensajeMagico" style="margin-bottom: 1rem; font-style: italic; font-weight: bold;"></p>
+        <audio id="vozMagica" src="https://files.catbox.moe/pdjk7n.mp3" preload="auto"></audio>
+      </section>
+
+      <section id="mensaje4" class="ventana" role="dialog" aria-modal="false" aria-labelledby="mensaje4Title" tabindex="-1">
+        <button class="cerrar" aria-label="Cerrar confeti rosa" onclick="cerrarVentana('mensaje4')">&times;</button>
+        <h2 id="mensaje4Title">Confeti rosa 🎉</h2>
+        <p>Activa o desactiva el confeti rosa para celebrar nuestro amor sin fin.</p>
+        <button id="btnConfeti" onclick="toggleConfeti()">🎊 Activar/Desactivar Confeti</button>
+      </section>
+    </div>
+  </div>
+
+  <div id="nubePalabras" aria-hidden="true"></div>
+  <canvas id="lluviaCorazonesCanvas" aria-hidden="true"></canvas>
+
+  <div id="audioContainer" aria-label="Control de audio">
+    <audio id="audioFondo" controls autoplay loop>
+      <source src="https://files.catbox.moe/u79a63.mp3" type="audio/mpeg" />
+      Tu navegador no soporta el audio :(
+    </audio>
+    <label for="controlVolumen">Volumen:</label>
+    <input id="controlVolumen" type="range" min="0" max="1" step="0.01" value="0.6" />
+  </div>
+
+  <div id="contador" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+  // Ventanas: solo una abierta a la vez
+  function toggleVentana(id, boton) {
+    const ventanas = document.querySelectorAll(".ventana");
+    ventanas.forEach(v => {
+      if (v.id === id) {
+        if (v.style.display === "block") {
+          v.style.display = "none";
+          boton.setAttribute("aria-expanded", "false");
+        } else {
+          v.style.display = "block";
+          boton.setAttribute("aria-expanded", "true");
+          v.focus();
+          if(id === "mensaje3") activarMagia();
+        }
+      } else {
+        v.style.display = "none";
+        const b = document.querySelector(`#botones button[aria-controls="${v.id}"]`);
+        if (b) b.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+  function cerrarVentana(id) {
+    const v = document.getElementById(id);
+    v.style.display = "none";
+    const b = document.querySelector(`#botones button[aria-controls="${id}"]`);
+    if (b) b.setAttribute("aria-expanded", "false");
+  }
+
+  // Nube de palabras mejorada, que se mueve en diferentes partes, detrás de todo, sin pasar por botones
+  const palabras = [
+    "canelita", "mi amor", "corazón", "mi vida", "luz", "mi todo", "mi sol", "mi cielo",
+    "ternura", "besos", "abrazos", "mi alegría", "mi musa", "mi reina", "mi princesa",
+    "dulzura", "mi sueño", "mi paz", "mi mundo", "mi felicidad", "mi alma",
+    "mi estrella", "mi suspiro", "mi sonrisa", "amor infinito", "mi refugio", "mi calma",
+    "mi magia", "mi inspiración", "mi cariño", "mi abrazo", "mi esperanza", "mi razón",
+    "mi vida eterna", "mi universo", "mi fuerza", "mi sol radiante", "mi cielo estrellado",
+    "mi mundo perfecto"
+  ];
+  const nube = document.getElementById("nubePalabras");
+  let palabrasDOM = [];
+
+  // Creamos 50 palabras distribuidas en pantalla, con posición % aleatoria
+  function crearNube() {
+    nube.innerHTML = "";
+    palabrasDOM = [];
+    for(let i=0; i<50; i++) {
+      const span = document.createElement("span");
+      span.classList.add("palabra");
+      span.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+      span.style.fontSize = (Math.random() * 18 + 12).toFixed(1) + "px";
+      span.style.opacity = (Math.random() * 0.4 + 0.3).toFixed(2);
+      // Posición inicial aleatoria, pero no en zona de botones (centro-bottom)
+      let x, y;
+      do {
+        x = Math.random() * 100;
+        y = Math.random() * 80; // que no baje mucho para no tapar botones
+      } while (x > 30 && x < 70 && y > 60); // evita área botones abajo-centro
+      span.style.left = x + "%";
+      span.style.top = y + "%";
+      nube.appendChild(span);
+      palabrasDOM.push({
+        el: span,
+        x,
+        y,
+        dx: (Math.random() - 0.5) * 0.07,
+        dy: (Math.random() - 0.5) * 0.04,
+      });
+    }
+  }
+  crearNube();
+
+  function animarNube() {
+    palabrasDOM.forEach(palabra => {
+      palabra.x += palabra.dx;
+      palabra.y += palabra.dy;
+      // Mantener dentro pantalla (0-100)
+      if (palabra.x < 0) palabra.x = 100;
+      else if (palabra.x > 100) palabra.x = 0;
+      if (palabra.y < 0) palabra.y = 80;
+      else if (palabra.y > 80) palabra.y = 0;
+      palabra.el.style.left = palabra.x + "%";
+      palabra.el.style.top = palabra.y + "%";
+    });
+    requestAnimationFrame(animarNube);
+  }
+  animarNube();
+
+  // Corazones que caen
+  const canvasLluvia = document.getElementById("lluviaCorazonesCanvas");
+  const ctxLluvia = canvasLluvia.getContext("2d");
+  canvasLluvia.width = window.innerWidth;
+  canvasLluvia.height = window.innerHeight;
+
+  const corazones = [];
+  const maxCorazones = 60;
+
+  class Corazon {
+    constructor() {
+      this.x = Math.random() * canvasLluvia.width;
+      this.y = Math.random() * -canvasLluvia.height;
+      this.size = Math.random() * 20 + 12;
+      this.speed = Math.random() * 1 + 0.6;
+      this.opacity = Math.random() * 0.6 + 0.4;
+      this.angle = Math.random() * Math.PI * 2;
+      this.spinSpeed = (Math.random() - 0.5) * 0.02;
+    }
+    dibujar() {
+      ctxLluvia.save();
+      ctxLluvia.translate(this.x, this.y);
+      ctxLluvia.rotate(this.angle);
+      ctxLluvia.fillStyle = `rgba(255, 105, 180, ${this.opacity})`;
+      ctxLluvia.beginPath();
+      ctxLluvia.moveTo(0, 0);
+      ctxLluvia.bezierCurveTo(0, -this.size/2, this.size/2, -this.size/2, this.size/2, 0);
+      ctxLluvia.bezierCurveTo(this.size/2, this.size/2, 0, this.size*0.75, 0, this.size);
+      ctxLluvia.bezierCurveTo(0, this.size*0.75, -this.size/2, this.size/2, -this.size/2, 0);
+      ctxLluvia.bezierCurveTo(-this.size/2, -this.size/2, 0, -this.size/2, 0, 0);
+      ctxLluvia.fill();
+      ctxLluvia.restore();
+    }
+    actualizar() {
+      this.y += this.speed;
+      this.angle += this.spinSpeed;
+      if (this.y > canvasLluvia.height + this.size) {
+        this.x = Math.random() * canvasLluvia.width;
+        this.y = -this.size;
+      }
+    }
+  }
+
+  let confetiActivado = false;
+
+  function animarCorazones() {
+    if (!confetiActivado) {
+      ctxLluvia.clearRect(0, 0, canvasLluvia.width, canvasLluvia.height);
+      requestAnimationFrame(animarCorazones);
+      return;
+    }
+    ctxLluvia.clearRect(0, 0, canvasLluvia.width, canvasLluvia.height);
+    if (corazones.length < maxCorazones) {
+      corazones.push(new Corazon());
+    }
+    corazones.forEach(c => {
+      c.actualizar();
+      c.dibujar();
+    });
+    requestAnimationFrame(animarCorazones);
+  }
+  animarCorazones();
+
+  function toggleConfeti() {
+    confetiActivado = !confetiActivado;
+    if (confetiActivado) {
+      animarCorazones();
+    } else {
+      ctxLluvia.clearRect(0, 0, canvasLluvia.width, canvasLluvia.height);
+    }
+  }
+
+  // Audio volumen control
+  const audioFondo = document.getElementById("audioFondo");
+  const controlVolumen = document.getElementById("controlVolumen");
+  controlVolumen.addEventListener("input", e => {
+    audioFondo.volume = e.target.value;
+  });
+
+  // Contador fecha amor
+  const fechaAmor = new Date("2023-01-01T00:00:00"); // cambia a la fecha que quieran
+  const contador = document.getElementById("contador");
+
+  function actualizarContador() {
+    const ahora = new Date();
+    let diff = ahora - fechaAmor;
+    if(diff < 0) diff = 0;
+    const dias = Math.floor(diff / (1000*60*60*24));
+    const horas = Math.floor((diff / (1000*60*60)) % 24);
+    const minutos = Math.floor((diff / (1000*60)) % 60);
+    const segundos = Math.floor((diff / 1000) % 60);
+    contador.textContent = `Nos amamos desde: ${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos ❤️`;
+  }
+  setInterval(actualizarContador, 1000);
+  actualizarContador();
+
+  // Función enviar beso (simple efecto visual)
+  function enviarBeso() {
+    const beso = document.createElement("div");
+    beso.textContent = "💋";
+    beso.style.position = "fixed";
+    beso.style.left = (window.innerWidth / 2 + (Math.random() * 200 - 100)) + "px";
+    beso.style.top = (window.innerHeight - 100) + "px";
+    beso.style.fontSize = "2.5rem";
+    beso.style.opacity = "1";
+    beso.style.transition = "all 2s ease-out";
+    beso.style.zIndex = 20;
+    document.body.appendChild(beso);
+    setTimeout(() => {
+      beso.style.top = (window.innerHeight - 400) + "px";
+      beso.style.opacity = "0";
+    }, 10);
+    setTimeout(() => {
+      beso.remove();
+    }, 2010);
+  }
+
+  // --- Aquí la función activarMagia() con máquina de escribir rápida ---
+  const frasesMagicas = [
+    "Cada bit de mi ser late por ti.",
+    "Eres el algoritmo de mi felicidad.",
+    "Compilas mis sueños en realidad.",
+    "Eres el ciclo for que recorre mi corazón."
+  ];
+  let indiceFraseMagica = 0;
+
+  function activarMagia() {
+    if (indiceFraseMagica >= frasesMagicas.length) indiceFraseMagica = 0;
+    const mensajeMagico = document.getElementById("mensajeMagico");
+    const audio = document.getElementById("vozMagica");
+    const texto = frasesMagicas[indiceFraseMagica];
+    indiceFraseMagica++;
+
+    mensajeMagico.textContent = "";
+    audio.pause();
+    audio.currentTime = 0;
+    audio.play();
+
+    let i = 0;
+    function escribir() {
+      if (i < texto.length) {
+        mensajeMagico.textContent += texto.charAt(i);
+        i++;
+        setTimeout(escribir, 20); // efecto rápido
+      }
+    }
+    escribir();
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
+
