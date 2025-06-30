@@ -214,6 +214,7 @@
       <button aria-controls="mensaje3" aria-expanded="false" onclick="toggleVentana('mensaje3', this)">Modo mágico 🌌</button>
       <button aria-controls="mensaje4" aria-expanded="false" onclick="toggleVentana('mensaje4', this)">Confeti rosa 🎉</button>
       <button onclick="enviarBeso()">Enviar beso 💋</button>
+    <button onclick="iniciarJuegoGusano()">Gusano de Amor 💘</button>
     </div>
 
     <div id="ventanas" role="region" aria-live="polite" aria-label="Ventanas de mensajes">
@@ -736,5 +737,111 @@ setInterval(actualizarContador, 1000);
   }
 </script>
 
+
+<!-- Gusano que atrapa corazones -->
+<canvas id="gameCanvas" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:100;"></canvas>
+<div id="puntaje" style="display:none; position:fixed; top:10px; left:10px; background:rgba(0,0,0,0.6); padding:0.5rem 1rem; border-radius:8px; font-size:1.4rem; z-index:101; color:white; font-family:monospace;">Puntos: 0</div>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let puntos = 0;
+const puntajeDiv = document.getElementById('puntaje');
+
+const gusano = {
+  cuerpo: [{ x: 100, y: 100 }],
+  direccion: 'derecha',
+  tamaño: 20,
+  velocidad: 20
+};
+
+let corazon;
+
+function iniciarJuegoGusano() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  puntajeDiv.style.display = 'block';
+  puntos = 0;
+  puntajeDiv.textContent = "Puntos: 0";
+  gusano.cuerpo = [{ x: 100, y: 100 }];
+  gusano.direccion = 'derecha';
+  corazon = generarCorazon();
+  clearInterval(window._gusanoLoop);
+  window._gusanoLoop = setInterval(juego, 150);
+}
+
+function generarCorazon() {
+  const cols = Math.floor(canvas.width / gusano.tamaño);
+  const rows = Math.floor(canvas.height / gusano.tamaño);
+  return {
+    x: Math.floor(Math.random() * cols) * gusano.tamaño,
+    y: Math.floor(Math.random() * rows) * gusano.tamaño
+  };
+}
+
+function dibujarGusano() {
+  ctx.fillStyle = '#fff';
+  gusano.cuerpo.forEach(parte => {
+    ctx.beginPath();
+    ctx.arc(parte.x + gusano.tamaño / 2, parte.y + gusano.tamaño / 2, gusano.tamaño / 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function dibujarCorazon() {
+  ctx.fillStyle = 'red';
+  const x = corazon.x;
+  const y = corazon.y;
+  const s = gusano.tamaño / 2;
+  ctx.beginPath();
+  ctx.moveTo(x + s, y + s);
+  ctx.arc(x + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
+  ctx.arc(x + s + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
+  ctx.lineTo(x + s, y + s + s);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function moverGusano() {
+  const cabeza = { ...gusano.cuerpo[0] };
+  switch (gusano.direccion) {
+    case 'arriba': cabeza.y -= gusano.velocidad; break;
+    case 'abajo': cabeza.y += gusano.velocidad; break;
+    case 'izquierda': cabeza.x -= gusano.velocidad; break;
+    case 'derecha': cabeza.x += gusano.velocidad; break;
+  }
+  gusano.cuerpo.unshift(cabeza);
+  if (cabeza.x === corazon.x && cabeza.y === corazon.y) {
+    puntos++;
+    puntajeDiv.textContent = `Puntos: ${puntos}`;
+    corazon = generarCorazon();
+  } else {
+    gusano.cuerpo.pop();
+  }
+}
+
+function juego() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  moverGusano();
+  dibujarCorazon();
+  dibujarGusano();
+}
+
+document.addEventListener('keydown', e => {
+  const dir = gusano.direccion;
+  if (e.key === 'ArrowUp' && dir !== 'abajo') gusano.direccion = 'arriba';
+  if (e.key === 'ArrowDown' && dir !== 'arriba') gusano.direccion = 'abajo';
+  if (e.key === 'ArrowLeft' && dir !== 'derecha') gusano.direccion = 'izquierda';
+  if (e.key === 'ArrowRight' && dir !== 'izquierda') gusano.direccion = 'derecha';
+});
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
 </body>
 </html>
+
