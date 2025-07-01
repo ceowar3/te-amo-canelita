@@ -69,7 +69,9 @@
   <div id="canvasContainer">
     <canvas id="gameCanvas"></canvas>
   </div>
-  <div id="puntaje">Puntos: 0</div>
+  
+  <div id="puntaje">Puntos: 0 | Récord: 0</div>
+
   <div id="controles">
     <div class="fila-controles">
       <div class="btn-control" onclick="cambiarDireccion('arriba')">⬆️</div>
@@ -93,7 +95,7 @@
       cuerpo: [{ x: 100, y: 100 }],
       direccion: 'derecha',
       tamaño: 14,
-      velocidad: 14
+      velocidad: 18
     };
 
     let corazon = generarCorazon();
@@ -147,13 +149,29 @@
       ) return;
 
       gusano.cuerpo.unshift(cabeza);
+      // Verifica colisión con el cuerpo
+      for (let i = 1; i < gusano.cuerpo.length; i++) {
+        if (
+          Math.abs(cabeza.x - gusano.cuerpo[i].x) < gusano.tamaño &&
+          Math.abs(cabeza.y - gusano.cuerpo[i].y) < gusano.tamaño
+        ) {
+          alert("💀 Te chocaste contigo mismo. Juego terminado.\nRécord actual: " + (localStorage.getItem("recordGusano") || 0));
+          location.reload(); // Recarga la página
+          return;
+        }
+      }
+
       
 function estaCerca(a, b, tolerancia = 14) {
   return Math.abs(a - b) < tolerancia;
 }
 if (estaCerca(cabeza.x, corazon.x) && estaCerca(cabeza.y, corazon.y)) {
         puntos++;
-        puntajeDiv.textContent = `Puntos: ${puntos}`;
+        puntajeDiv.textContent = `Puntos: ${puntos} | Récord: ${localStorage.getItem("recordGusano") || 0}`;
+        if (puntos > (localStorage.getItem("recordGusano") || 0)) {
+          localStorage.setItem("recordGusano", puntos);
+        }
+
         corazon = generarCorazon();
       } else {
         gusano.cuerpo.pop();
@@ -167,7 +185,7 @@ if (estaCerca(cabeza.x, corazon.x) && estaCerca(cabeza.y, corazon.y)) {
       dibujarGusano();
     }
 
-    setInterval(juego, 150);
+    setInterval(juego, 80);
 
     function cambiarDireccion(nueva) {
       const dir = gusano.direccion;
@@ -190,26 +208,7 @@ if (estaCerca(cabeza.x, corazon.x) && estaCerca(cabeza.y, corazon.y)) {
     });
   </script>
 
-<div id="contador" style="position:fixed;bottom:90px;left:10px;font-size:1.1rem;color:white;font-family:monospace;z-index:1001;">
-  Llevamos juntos: cargando... ❤️
-</div>
-<script>
-const contador = document.getElementById("contador");
-const fechaInicio = new Date("2024-06-16T00:00:00-04:00");
-function actualizarContador() {
-  const ahora = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-  const fechaAhora = new Date(ahora);
-  const diff = fechaAhora - fechaInicio;
-  const totalSegundos = Math.floor(diff / 1000);
-  const dias = Math.floor(totalSegundos / (60 * 60 * 24));
-  const horas = Math.floor((totalSegundos % (60 * 60 * 24)) / (60 * 60));
-  const minutos = Math.floor((totalSegundos % (60 * 60)) / 60);
-  const segundos = totalSegundos % 60;
-  contador.textContent = `Llevamos juntos: ${dias} días, ${horas}h ${minutos}m ${segundos}s ❤️`;
-}
-setInterval(actualizarContador, 1000);
-actualizarContador();
-</script>
+
 
 </body>
 </html>
