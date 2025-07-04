@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Gusano de Amor Fullscreen</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+    #canvasContainer {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 120px); /* deja espacio para botones */
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #000;
+    }
+    #controles {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .fila-controles {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-control {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.3);
+      border: 2px solid #fff;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      text-align: center;
+      line-height: 60px;
+      color: #fff;
+      user-select: none;
+    }
+    #puntaje {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1.4rem;
+      z-index: 1001;
+      color: white;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="canvasContainer">
+    <canvas id="gameCanvas"></canvas>
+  </div>
+  
+  <div id="puntaje">Puntos: 0 | Récord: 0</div>
+
+  <div id="controles">
+    <div class="fila-controles">
+      <div class="btn-control" onclick="cambiarDireccion('arriba')">⬆️</div>
+    </div>
+    <div class="fila-controles">
+      <div class="btn-control" onclick="cambiarDireccion('izquierda')">⬅️</div>
+      <div class="btn-control" onclick="cambiarDireccion('abajo')">⬇️</div>
+      <div class="btn-control" onclick="cambiarDireccion('derecha')">➡️</div>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 120;
+
+    let puntos = 0;
+    const puntajeDiv = document.getElementById('puntaje');
+
+    const gusano = {
+      cuerpo: [{ x: 100, y: 100 }],
+      direccion: 'derecha',
+      tamaño: 14,
+      velocidad: 18
+    };
+
+    let corazon = generarCorazon();
+
+    function generarCorazon() {
+      const cols = Math.floor(canvas.width / gusano.tamaño);
+      const rows = Math.floor(canvas.height / gusano.tamaño);
+      return {
+        x: Math.floor(Math.random() * cols) * gusano.tamaño,
+        y: Math.floor(Math.random() * rows) * gusano.tamaño
+      };
+    }
+
+    function dibujarGusano() {
+      ctx.fillStyle = '#fff';
+      gusano.cuerpo.forEach(parte => {
+        ctx.beginPath();
+        ctx.arc(parte.x + gusano.tamaño / 2, parte.y + gusano.tamaño / 2, gusano.tamaño / 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function dibujarCorazon() {
+      ctx.fillStyle = 'red';
+      const x = corazon.x;
+      const y = corazon.y;
+      const s = gusano.tamaño / 2;
+      ctx.beginPath();
+      ctx.moveTo(x + s, y + s);
+      ctx.arc(x + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
+      ctx.arc(x + s + s / 2, y + s / 2, s / 2, 0, Math.PI * 2);
+      ctx.lineTo(x + s, y + s + s);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function moverGusano() {
+      const cabeza = { ...gusano.cuerpo[0] };
+      switch (gusano.direccion) {
+        case 'arriba': cabeza.y -= gusano.velocidad; break;
+        case 'abajo': cabeza.y += gusano.velocidad; break;
+        case 'izquierda': cabeza.x -= gusano.velocidad; break;
+        case 'derecha': cabeza.x += gusano.velocidad; break;
+      }
+
+      if (
+        cabeza.x < 0 ||
+        cabeza.x >= canvas.width ||
+        cabeza.y < 0 ||
+        cabeza.y >= canvas.height
+      ) return;
+
+      gusano.cuerpo.unshift(cabeza);
+      // Verifica colisión con el cuerpo
+      for (let i = 1; i < gusano.cuerpo.length; i++) {
+        if (
+          Math.abs(cabeza.x - gusano.cuerpo[i].x) < gusano.tamaño &&
+          Math.abs(cabeza.y - gusano.cuerpo[i].y) < gusano.tamaño
+        ) {
+          alert("💀 Te chocaste contigo mismo. Juego terminado.\nRécord actual: " + (localStorage.getItem("recordGusano") || 0));
+          location.reload(); // Recarga la página
+          return;
+        }
+      }
+
+      
+function estaCerca(a, b, tolerancia = 14) {
+  return Math.abs(a - b) < tolerancia;
+}
+if (estaCerca(cabeza.x, corazon.x) && estaCerca(cabeza.y, corazon.y)) {
+        puntos++;
+        puntajeDiv.textContent = `Puntos: ${puntos} | Récord: ${localStorage.getItem("recordGusano") || 0}`;
+        if (puntos > (localStorage.getItem("recordGusano") || 0)) {
+          localStorage.setItem("recordGusano", puntos);
+        }
+
+        corazon = generarCorazon();
+      } else {
+        gusano.cuerpo.pop();
+      }
+    }
+
+    function juego() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      moverGusano();
+      dibujarCorazon();
+      dibujarGusano();
+    }
+
+    setInterval(juego, 80);
+
+    function cambiarDireccion(nueva) {
+      const dir = gusano.direccion;
+      if (nueva === 'arriba' && dir !== 'abajo') gusano.direccion = 'arriba';
+      if (nueva === 'abajo' && dir !== 'arriba') gusano.direccion = 'abajo';
+      if (nueva === 'izquierda' && dir !== 'derecha') gusano.direccion = 'izquierda';
+      if (nueva === 'derecha' && dir !== 'izquierda') gusano.direccion = 'derecha';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp') cambiarDireccion('arriba');
+      if (e.key === 'ArrowDown') cambiarDireccion('abajo');
+      if (e.key === 'ArrowLeft') cambiarDireccion('izquierda');
+      if (e.key === 'ArrowRight') cambiarDireccion('derecha');
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 120;
+    });
+  </script>
+
+
+
+</body>
+</html>
